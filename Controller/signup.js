@@ -13,10 +13,12 @@ const userRegister = asyncHandler(async (req, res) => {
 
     const checkUser = await user.findOne({ email });
     if (checkUser) {
+        console.log(checkUser);
         return res.status(400).json({ success: false, message: "User already exists." });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+    console.log(hashPassword);
 
     const newUser = await user.create({
         name,
@@ -25,15 +27,10 @@ const userRegister = asyncHandler(async (req, res) => {
         role
     });
 
-    res.status(200).json({
+    res.status(201).json({
         success: true,
         message: "User Created Successfully.",
-        data: {
-            id: newUser._id,
-            name: newUser.name,
-            email: newUser.email,
-            role: newUser.role
-        }
+        user:newUser
     });
 });
 
